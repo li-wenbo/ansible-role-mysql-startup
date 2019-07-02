@@ -1,0 +1,26 @@
+- name: create some mysql dir
+  become: True
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: mysql
+    group: mysql
+    mode: "0700"
+  with_items:
+    - "{{ mysql_server_root_dir }}"
+    - "{{ mysql_server_root_dir }}/data"
+    - "{{ mysql_server_root_dir }}/tmp"
+    - "{{ mysql_server_root_dir }}/innodb_tmp"
+    - "{{ mysql_server_root_dir }}/logs"
+
+- name: cp my.cnf to db server
+  become: True
+  template:
+    dest: /etc/my.cnf
+    src: my.cnf.j2
+    backup: yes
+
+- name: init db
+  become: True
+  shell: '"{{ mysql_server_basedir }}/bin/mysql_install_db" --insecure --datadir="{{ mysql_server_root_dir }}/data" --user=mysql'
+  ignore_errors: True

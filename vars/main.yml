@@ -1,0 +1,8 @@
+---
+# vars file for startup
+downloads_dir: '{{ role_path }}/files'
+
+mysql_file_name: mysql-5.7.26-el7-x86_64
+mysql_gz_url: 'https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.26-el7-x86_64.tar.gz'
+mysql_gz_filepath: '{{ downloads_dir }}/{{ mysql_file_name }}.tar.gz'
+

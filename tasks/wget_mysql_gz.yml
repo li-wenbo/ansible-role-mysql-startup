@@ -1,0 +1,12 @@
+# download mysql gz tar to local
+- name: if gz exits
+  stat: path={{ mysql_gz_filepath }}
+  delegate_to: localhost
+  run_once: True
+  register: s
+
+- name: wget pip.py
+  get_url: url={{ mysql_gz_url }} dest={{ downloads_dir }} force=no checksum="md5:3830e0fdb737d3ea2c2aca4e36876d9a"
+  delegate_to: localhost
+  run_once: True
+  when: not s.stat.exists  

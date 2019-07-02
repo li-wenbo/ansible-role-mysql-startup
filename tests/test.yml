@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  remote_user: oops
+  roles:
+    - role: mysql-startup

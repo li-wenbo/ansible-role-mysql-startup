@@ -1,0 +1,33 @@
+# install mysql using binary gz file
+
+- name: create data dir
+  become: True
+  file: state=directory path=/data  
+- name: create group for mysql
+  become: True
+  group: name=mysql state=present  
+- name: create user for mysql
+  become: True
+  user: >
+    name=mysql group=mysql state=present 
+    home=/var/lib/mysql shell=/usr/sbin/nologin  
+- name: install mysql through gz
+  become: True
+  unarchive:
+    src: "{{ mysql_gz_filepath }}"
+    dest: "{{ mysql_remote_dir }}"
+    creates: "{{ mysql_remote_dir }}/{{ mysql_file_name }}"
+    owner: mysql
+    group: mysql  
+- name: create symbolic link for mysql
+  become: True
+  file:
+    state: link
+    path: "{{ mysql_server_basedir }}"
+    src: "{{ mysql_remote_dir }}/{{ mysql_file_name }}"
+- name: cp mysql.server to /etc/init.d
+  become: True
+  shell: cp "{{ mysql_server_basedir }}/support-files/mysql.server" /etc/init.d/mysqld
+  args:
+      creates: /etc/init.d/mysqld
+

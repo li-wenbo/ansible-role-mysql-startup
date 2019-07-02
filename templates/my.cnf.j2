@@ -1,0 +1,77 @@
+[client]
+port = {{ mysql_server_port }}
+socket = {{ mysql_server_root_dir }}/mysql.sock
+
+[mysql]
+prompt = [\\u@\\p][\\d]>\\_
+no-auto-rehash
+default_character_set = utf8
+max_allowed_packet = 64M
+
+[mysqldump]
+single-transaction
+
+[mysqld]
+# basic settings #
+basedir = {{ mysql_server_basedir }}
+datadir = {{ mysql_server_root_dir }}/data
+tmpdir = {{ mysql_server_root_dir }}/tmp
+innodb_tmpdir = {{ mysql_server_root_dir }}/innodb_tmp
+lc-messages-dir = {{ mysql_server_basedir }}/share
+pid-file = {{ mysql_server_root_dir }}/mysqld.pid
+port = {{ mysql_server_port }}
+socket = {{ mysql_server_root_dir }}/mysql.sock
+
+server-id = {{ mysql_server_id }}
+user = mysql
+sql_mode = "STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER"
+autocommit = 1
+character_set_server=utf8mb4
+default_storage_engine = InnoDB
+transaction_isolation = READ-COMMITTED
+max_allowed_packet = 64M
+event_scheduler = 1
+open_files_limit = 8192
+
+# connection #
+max_connections = 505
+max_user_connections = 500
+thread_cache_size = 505
+
+# table cache performance settings
+table_open_cache = 4096
+table_definition_cache = 4096
+table_open_cache_instances = 64
+
+# session memory settings #
+read_buffer_size = 16M
+read_rnd_buffer_size = 32M
+sort_buffer_size = 32M
+tmp_table_size = 64M
+join_buffer_size = 128M
+
+# log settings #
+log_error = {{ mysql_server_root_dir }}/logs/error.log   #default located under the data directory 
+log_bin = {{ mysql_server_root_dir }}/logs/mysql-bin
+binlog_format = MIXED
+general_log_file = {{ mysql_server_root_dir }}/logs/general.log
+slow_query_log = 1
+slow_query_log_file = {{ mysql_server_root_dir }}/logs/slow.log
+log_queries_not_using_indexes = 1
+log_slow_admin_statements = 1
+log_slow_slave_statements = 1
+log-slave-updates = 1
+log_throttle_queries_not_using_indexes = 10
+expire_logs_days = 90
+long_query_time = 2
+min_examined_row_limit = 100
+
+# InnoDB variables 
+innodb_strict_mode             = ON
+innodb_file_format_check       = 1
+innodb_buffer_pool_instances   = 8     #Bigger if huge InnoDB Buffer Pool or high concurrency
+innodb_file_per_table          = 1     #Is the recommended way nowadays
+innodb_flush_log_at_trx_commit = 2     #1 for durability, 0 or 2 for performance
+innodb_log_buffer_size         = 8M    #Bigger if innodb_flush_log_at_trx_commit = 0
+innodb_log_file_size           = 256M  #Bigger means more write throughput but longer recovery time
+

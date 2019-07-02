@@ -1,0 +1,19 @@
+---
+# tasks file for startup
+
+- name: wget mysql binary gzfile when we needs 
+  include_tasks: wget_mysql_gz.yml
+
+- name: install mysqld using gzfile
+  include_tasks: install_mysql_by_gzfile.yml
+
+- name: init mysql db
+  include_tasks: init_mysql_db.yml
+
+- name: start db
+  shell: /etc/init.d/mysqld start
+  become: True
+  ignore_errors: True
+
+- name: alter root password
+  include_tasks: alter_root_password.yml
