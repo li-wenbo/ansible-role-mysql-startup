@@ -1,5 +1,13 @@
 ---
 # tasks file for startup
+- name: get root password from encrypt file
+  include_vars: passwd.yml
+
+- block:
+    - name: ends
+      debug: var=mysql_root_password
+    - meta: end_play
+  when: mysql_root_password is undefined
 
 - name: wget mysql binary gzfile when we needs 
   include_tasks: wget_mysql_gz.yml
@@ -17,3 +25,5 @@
 
 - name: alter root password
   include_tasks: alter_root_password.yml
+
+

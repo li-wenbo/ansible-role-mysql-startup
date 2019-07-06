@@ -3,6 +3,4 @@
 mysql_remote_dir: /usr/local
 mysql_server_basedir: /usr/local/mysql
 mysql_server_port: 3306
-mysql_server_root_dir: "{{ ['/data/mysql', mysql_server_port]| join('_')|regex_replace('_3306') }}"     # /data/mysql /data/mysql_3307 /data/mysql_3308 etc
-
-mysql_root_password: 'root@123'
+mysql_server_root_dir: "{{ ['/data/mysql', mysql_server_port]| join('_')|replace('_3306', '') }}"     # /data/mysql /data/mysql_3307 /data/mysql_3308 etc
